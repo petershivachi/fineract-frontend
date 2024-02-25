@@ -1,0 +1,404 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="card">
+      <div class="header">
+          <h2 class="font-bold col-brown">{{ title }}:  </h2>
+      </div>
+      <div class="body">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="table-responsive">
+                  <div class="materialTableHeader">
+                      <div class="row">
+                          <div class="col-8">
+                              <ul class="header-buttons-left ms-0">
+                                  <li class="dropdown">
+                                      <h2>{{ title }} </h2>
+                                  </li>
+                                  <li class="dropdown m-l-20">
+                                      <label for="search-input"><i
+                                              class="material-icons search-icon">search</i></label>
+                                      <input placeholder="Filter..." type="text" (keyup)="applyFilter($event)" (change)="search($event)" #filter
+                                          class="browser-default search-field" aria-label="Search box" />
+                                  </li>
+                                  <li>
+                                      <div class="m-l-10" matTooltip="REFRESH">
+                                          <button mat-mini-fab color="primary" (click)="pageChanged(null)">
+                                              <mat-icon class="col-white">refresh</mat-icon>
+                                          </button>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </div>
+                          <div class="col-4">
+                              <ul class="header-buttons">
+                                <li>
+                                  <div class="export-button m-l-10" matTooltip="XLSX">
+                                    <img
+                                      src="assets/images/icons/xlsx.png"
+                                      alt=""
+                                      (click)="
+                                        exporter.exportTable('xlsx', {
+                                          fileName: 'Recon Records',
+                                          sheet: 'sheet1'
+                                        })
+                                      "
+                                    />
+                                  </div>
+                                </li>
+                                <li>
+                                  <div class="export-button m-l-10" matTooltip="CSV">
+                                    <img
+                                      src="assets/images/icons/csv.png"
+                                      alt=""
+                                      (click)="exporter.exportTable('csv')"
+                                    />
+                                  </div>
+                                </li>
+                                <li>
+                                  <div class="export-button m-l-10" matTooltip="JSON">
+                                    <img
+                                      src="assets/images/icons/json.png"
+                                      alt=""
+                                      (click)="exporter.exportTable('json')"
+                                    />
+                                  </div>
+                                </li>
+                                <li>
+                                  <div class="export-button m-l-10" matTooltip="TXT">
+                                    <img
+                                      src="assets/images/icons/txt.png"
+                                      alt=""
+                                      (click)="exporter.exportTable('txt')"
+                                    />
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          <!-- <div class="col-4">
+                              <ul class="header-buttons">
+                                <li>
+                                    <button
+                                      type="button"
+                                      class="btn btn-success waves-effect m-l-10"
+                                      (click)="generateExcel(title)"
+                                    >
+                                      <i class="fas fa-file-download"></i> Export Excel
+                                    </button>
+                                  </li>
+                              </ul>
+                          </div> -->
+                      </div>
+                  </div>
+                  <mat-table #table matTableExporter [dataSource]="datasource" matSort #sort="matSort"
+                      class="mat-cell" #exporter="matTableExporter">
+                      <ng-container matColumnDef="select">
+                          <mat-header-cell *matHeaderCellDef [ngClass]="'tbl-col-width-per-6'">
+                              <mat-checkbox (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                  [ngClass]="'tbl-checkbox'">
+                              </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'">
+                              <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)" [ngClass]="'tbl-checkbox'">
+                              </mat-checkbox>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="username">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-35">Username
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.username">
+                                {{ row.username}}
+                            </div>
+                            <div *ngIf="!row.username">
+                                    {{"-"}}
+                            </div>
+                           </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="officeId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-35">Office Id
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="psl-3 tbl-col-width-per-35">
+                          <div *ngIf="row.officeId">
+                              {{ row.officeId}}
+                          </div>
+                          <div *ngIf="!row.officeId">
+                                  {{"-"}}
+                          </div>
+                         </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="firstname">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-35">Firstname
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="psl-3 tbl-col-width-per-35">
+                          <div *ngIf="row.firstname">
+                              {{ row.firstname}}
+                          </div>
+                          <div *ngIf="!row.firstname">
+                                  {{"-"}}
+                          </div>
+                         </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="lastname">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-35">Lastname
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="psl-3 tbl-col-width-per-35">
+                          <div *ngIf="row.lastname">
+                              {{ row.lastname}}
+                          </div>
+                          <div *ngIf="!row.lastname">
+                                  {{"-"}}
+                          </div>
+                         </mat-cell>
+                    </ng-container>
+                      <ng-container matColumnDef="email">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-35">Solid
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.email">
+                                {{ row.email}}
+                            </div>
+                            <div *ngIf="!row.email">
+                                    {{"-"}}
+                            </div>
+                            </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="startTime">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-85">Start time
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.startTime">
+                                {{ row.startTime}}
+                            </div>
+                            <div *ngIf="!row.startTime">
+                                    {{"-"}}
+                            </div>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="endTime">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-85">End time
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.endTime">
+                                {{ row.endTime}}
+                            </div>
+                            <div *ngIf="!row.endTime">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="creditAmount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-85">Credit Amount
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.creditAmount">
+                                {{ row.creditAmount}}
+                            </div>
+                            <div *ngIf="!row.creditAmount">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="debitAmount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-85">Debit amount
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.debitAmount">
+                                {{ row.debitAmount}}
+                            </div>
+                            <div *ngIf="!row.debitAmount">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="finAmount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-85">Fin amount
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.debitAmount">
+                                {{ row.finAmount}}
+                            </div>
+                            <div *ngIf="!row.finAmount">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="tranId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-85">Tran id
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.tranId">
+                                {{ row.tranId}}
+                            </div>
+                            <div *ngIf="!row.tranId">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="tranParticular">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-85">Tran particular
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.tranParticular">
+                                {{ row.tranParticular}}
+                            </div>
+                            <div *ngIf="!row.tranParticular">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                      <ng-container matColumnDef="customerAccountName">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-85">Customer name
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.customerAccountName">
+                                {{ row.customerAccountName}}
+                            </div>
+                            <div *ngIf="!row.customerAccountName">
+                                    {{"-"}}
+                            </div>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="customerAccountNumber">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                                           class="column-nowrap psl-3 tbl-col-width-per-85">Customer account
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                             <span *ngIf="row.customerAccountNumber">{{ row.customerAccountNumber }}</span>
+                              <span *ngIf="!row.customerAccountNumber">{{ "-" }}</span>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="tranDate">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-35">Tran date
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                              <div *ngIf="row.tranDate">
+                                {{ row.tranDate | date: 'short'}}
+                            </div>
+                            <div *ngIf="!row.tranDate">
+                                    {{"-"}}
+                            </div>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="valueDate">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-35">Value date
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.valueDate">
+                                {{ row.valueDate | date: 'short'}}
+                            </div>
+                            <div *ngIf="!row.valueDate">
+                                    {{"-"}}
+                            </div>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="reconDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="column-nowrap psl-3 tbl-col-width-per-35">Recon date
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                            <div *ngIf="row.reconDate">
+                                {{ row.reconDate | date: 'short'}}
+                            </div>
+                            <div *ngIf="!row.reconDate">
+                                    {{"-"}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                      <ng-container matColumnDef="status">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header
+                              class="column-nowrap psl-3 tbl-col-width-per-35">Status
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                              <div *ngIf="row.status=='Match'">
+                                  <span class="badge badge-pill badge-primary col-green">
+                                      {{"Match"}}</span>
+                              </div>
+                              <div *ngIf="row.status=='Exception'">
+                                  <span class="badge badge-pill badge-primary col-red">
+                                      {{"Exception"}}</span>
+                              </div>
+                              <div *ngIf="row.status=='Pending Reversal'">
+                                  <span class="badge badge-pill badge-primary col-brown">
+                                      {{"Pending Reversal"}}</span>
+                              </div>
+                              <div *ngIf="row.status=='Settled Reversal'">
+                                <span class="badge badge-pill badge-primary col-brown">
+                                    {{"Settled Reversal"}}</span>
+                            </div>
+                              <div *ngIf="row.status=='Pending Float'">
+                                  <span class="badge badge-pill badge-primary col-blue">
+                                      {{"Pending Float"}}</span>
+                              </div>
+                              <div *ngIf="row.status=='Settled Float'">
+                                  <span class="badge badge-pill badge-primary col-blue">
+                                      {{"Settled Float"}}</span>
+                              </div>
+                              <div *ngIf="row.status=='Spillover'">
+                                  <span class="badge badge-pill badge-purple col-purple">
+                                      {{"Spillover"}}</span>
+                              </div>
+                              <div *ngIf="row.status=='Settled Manual Completion'">
+                                <span class="badge badge-pill badge-primary col-blue">
+                                    {{"Settled Manual Completion"}}</span>
+                            </div>
+                            <div *ngIf="row.status=='Pending Manual Completion'">
+                                <span class="badge badge-pill badge-purple col-purple">
+                                    {{"Pending Manual Completion"}}</span>
+                            </div>
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="view">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header class="psl-3 tbl-col-width-per-35">View
+                              record
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-35">
+                              <div>
+                                  <span class="badge badge-solid-brown" (click)="viewRecord(row)">
+                                      View Record</span>
+                              </div>
+                          </mat-cell>
+                      </ng-container>
+                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; let i = index columns: displayedColumns" [class.odd-row]="i % 2"
+                          [class.even-row]="!(i % 2)" [style.cursor]="'pointer'" [style.cursor]="'pointer'" matRipple>
+                      </mat-row>
+<!--                        <mat-cell *matNoDataRow colspan="4">-->
+<!--                            No data matching the filter "{{ input.value }}"-->
+<!--                        </mat-cell>-->
+                  </mat-table>
+                  <div *ngIf="isLoading" class="tbl-spinner">
+                      <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                      </mat-progress-spinner>
+                  </div>
+
+                  <div *ngIf="!allRecordsExist" class="no-results p-5">
+                      No records found
+                  </div>
+
+                  <mat-paginator #paginator="matPaginator" [length]="totalRows" [pageIndex]="currentPage"
+                      [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)"
+                      aria-label="Select page of users"></mat-paginator>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>

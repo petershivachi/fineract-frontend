@@ -1,0 +1,30 @@
+<section class="content">
+  <div class="content-block">
+      <div class="block-header">
+          <app-breadcrumb [title]="'Configure User'" [items]="['Admin']"
+                          [active_item]="'Account Management'">
+          </app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+              <div class="card mt-3">
+                  <div class="header"></div>
+                  <div class="body">
+                      <div class="row mt-3">
+                          <mat-tab-group>
+                              <mat-tab label="Add User Account">
+                                  <br/>
+                                  <app-add-user-form title="Bulk Upload"></app-add-user-form>
+                              </mat-tab>
+                              <mat-tab label="Bulk Upload">
+                                  <br/>
+                                  <app-user-bulk-upload itle="Bulk Upload"></app-user-bulk-upload>
+                              </mat-tab>
+                          </mat-tab-group>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>

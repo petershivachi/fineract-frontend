@@ -1,0 +1,18 @@
+<mat-dialog-content>
+    <div class="row">
+        <div class="col-1">
+            <mat-icon [color]="status === 'error' ? 'warn' : 'primary' " *ngIf="icon"
+                      style="font-size: 36px">{{icon | lowercase}}</mat-icon>
+        </div>
+        <div class="col-11">
+            {{message}}
+
+        </div>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button [color]="status == 'error'? 'warn' : 'primary'" mat-dialog-close>
+        {{buttonText}}
+    </button>
+</mat-dialog-actions>

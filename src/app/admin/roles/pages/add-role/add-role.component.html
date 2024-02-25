@@ -1,0 +1,165 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb
+        [title]="'Roles Management'"
+        [items]="['User']"
+        [active_item]="'Roles'"
+      ></app-breadcrumb>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <mat-progress-bar
+          mode="indeterminate"
+          *ngIf="isLoading"
+        ></mat-progress-bar>
+      </div>
+      <div class="body">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
+            <mat-form-field
+              class="example-full-width text-uppercase"
+              appearance="outline"
+            >
+              <mat-label>Role Name</mat-label>
+              <input
+                class="text-uppercase"
+                matInput
+                required
+                #nameInput
+                [(ngModel)]="roleName"
+                [readonly]="!!rolesData"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row overflow-hidden" style="height: 420px">
+          <div class="col-5 h-100 overflow-hidden card">
+            <span class="h6 bg-light header">SELECTION TREE</span>
+            <mat-tree
+              [dataSource]="dataSource"
+              [treeControl]="treeControl"
+              class="example-tree overflow-auto body"
+            >
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                <mat-checkbox
+                  [value]="node.accessRight.accessRights"
+                  (change)="childChanged(node)"
+                  [checked]="
+                    selection.isSelected(node.accessRight.accessRights)
+                  "
+                  [disabled]="
+                    function_type !== 'ADD' && function_type !== 'UPDATE'
+                  "
+                  >{{ node.name | uppercase }}</mat-checkbox
+                >
+              </mat-tree-node>
+
+              <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                <div class="mat-tree-node {{ !node.category ? 'col-6' : '' }}">
+                  <button
+                    mat-icon-button
+                    matTreeNodeToggle
+                    [attr.aria-label]="'Toggle ' + node.name"
+                  >
+                    <mat-icon class="mat-icon-rtl-mirror fw-bold">
+                      {{
+                        treeControl.isExpanded(node)
+                          ? "expand_more"
+                          : "chevron_right"
+                      }}
+                    </mat-icon>
+                  </button>
+                  <span class="fw-bold">
+                    <mat-checkbox
+                      [matBadge]="
+                        selectionMap.get(node.name).selected.selected.length
+                      "
+                      matBadgeColor="accent"
+                      [matBadgeHidden]="
+                        selectionMap.get(node.name).selected.selected.length ==
+                        0
+                      "
+                      matBadgeSize="small"
+                      (change)="selectAllByCategoryOrSubCategory(node, $event)"
+                      [checked]="
+                        selectionMap.get(node.name).selected.selected.length ===
+                        selectionMap.get(node.name).total
+                      "
+                      [disabled]="
+                        function_type !== 'ADD' && function_type !== 'UPDATE'
+                      "
+                      >{{ node.name | uppercase }}
+                    </mat-checkbox></span
+                  >
+                </div>
+                <div
+                  [class.example-tree-invisible]="!treeControl.isExpanded(node)"
+                  role="group"
+                >
+                  <ng-container matTreeNodeOutlet></ng-container>
+                </div>
+              </mat-nested-tree-node>
+            </mat-tree>
+          </div>
+          <div class="col-7 h-100 overflow-hidden card">
+            <span class="h6 bg-light header">SELECTED PRIVILEGES</span>
+            <mat-chip-list
+              aria-label="selected"
+              style="overflow-y: auto; overflow-x: hidden"
+              class="body"
+            >
+              <mat-chip
+                [removable]="true"
+                *ngFor="let each of selection.selected"
+                >{{ nodesDict[each].name | uppercase }}
+                <button
+                  *ngIf="function_type == 'ADD' || function_type == 'UPDATE'"
+                  matChipRemove
+                  [attr.aria-label]="'remove ' + each"
+                  (click)="removeSelected(each)"
+                >
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+
+        <div class="row justify-content-end w-100 px-5">
+          <button
+            mat-raised-button
+            type="button"
+            class="col-2 mx-2"
+            routerLink="/admin/roles/view"
+            [disabled]="loading"
+            color="accent"
+          >
+            <mat-icon>arrow_back</mat-icon>
+            BACK
+          </button>
+          <button
+            *ngIf="function_type !== 'VIEW'"
+            [disabled]="
+              nameInput.value.length == 0 ||
+              selection.selected.length == 0 ||
+              loading
+            "
+            (click)="onSubmit()"
+            mat-raised-button
+            class="col-2 mx-2"
+            color="primary"
+          >
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span
+            >{{ function_type }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
