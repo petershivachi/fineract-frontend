@@ -9,16 +9,12 @@ import {Role} from "../types/role";
 })
 export class RoleService {
 
-  roles_url = environment.apiUrl + "/api/v1/roles/";
+  roles_url = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
 
-  getRoleDetails(roleId): Observable<any>{
-    const getRoleDetailsUrl = `${this.roles_url}${roleId}`;
 
-    return this.http.get<any>(getRoleDetailsUrl)
-  }
 
   fetchAllAccessRights(): Observable<any>{
     const fetchAllAccessRightsUrl = `${this.roles_url}access-rights`;
@@ -39,7 +35,7 @@ export class RoleService {
   }
 
   getAllRoles(): Observable<any>{
-    const getAllRolesUrl = `${this.roles_url}all-roles`;
+    const getAllRolesUrl = `${this.roles_url}/fineract-provider/api/v1/roles`;
 
     return this.http.get<any>(getAllRolesUrl)
   }

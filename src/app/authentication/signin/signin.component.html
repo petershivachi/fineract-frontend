@@ -4,17 +4,6 @@
       <div class="form-section">
         <div class="auth-wrapper">
           <h2 class="welcome-msg text-center"> Fineract Frontend</h2>
-          <div class="d-flex justify-content-between lbl-alert mb-3 mt-5">
-            <div>
-              <button mat-raised-button color="primary" type="button" (click)="adminSet();">Admin</button>
-            </div>
-            <div>
-              <button mat-raised-button color="accent" type="button" (click)="employeeSet();">Employee</button>
-            </div>
-            <div>
-              <button mat-raised-button color="warn" type="button" (click)="clientSet();">Client</button>
-            </div>
-          </div>
           <h2 class="login-title text-center">Sign in</h2>
           <form class="validate-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
             <div class="row">

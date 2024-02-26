@@ -20,8 +20,8 @@ export class RolesComponent implements OnInit {
   displayedColumns: string[] = [
     "id",
     "name",
-    "postedBy",
-    "postedTime",
+    "disabled",
+    "description",
     "actions",
   ];
   dataSource!: MatTableDataSource<any>;
@@ -48,7 +48,7 @@ export class RolesComponent implements OnInit {
 
     // this.currentUser = this.tokenCookieService.getUser().username;
 
-    // this.getRoles();
+    this.getRoles();
   }
 
   refresh() {
@@ -58,12 +58,11 @@ export class RolesComponent implements OnInit {
   getRoles() {
     this.roleService.getAllRoles().subscribe(
       (res) => {
-        this.Roles = res.roles;
-
-        if (!!this.Roles) {
+        console.log("Roles *** ", res)
+        if (res.length > 0) {
           this.isLoading = false;
 
-          this.dataSource = new MatTableDataSource<any>(this.Roles);
+          this.dataSource = new MatTableDataSource<any>(res);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         }

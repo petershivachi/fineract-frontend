@@ -12,6 +12,14 @@
                   <div class="body">
                       <div class="row mt-3">
                           <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                            <mat-tab label="All Accounts">
+                                <br/>
+                                <app-user-table [data]="allPaybillRecords"
+                                                         title="All Accounts"
+                                                         [title]="selectedTabTitle"
+                                                         [displayedColumns]="tab1DisplayedColumns"
+                                                         #tableRef></app-user-table>
+                            </mat-tab>
                               <mat-tab label="Personal Accounts">
                                   <br/>
                                   <app-user-table [data]="settledManualCompletionRecords"

@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
+import { UserDetailsComponent } from '../../../dialogs/user-details/user-details.component';
 
 @Component({
   selector: 'app-user-table',
@@ -73,20 +74,17 @@ export class UserTableComponent implements OnInit {
       "firstname",
       "lastname",
       "email",
-      // "roles",
       "view",
     ];
 
-    this.title = "Personal Accounts";
+    this.title = "All Accounts";
 
     this.data.subscribe((dt) => {
-      this.totalRows = dt.totalItems;
-
       this.datasource = new MatTableDataSource<any>([]);
 
-      if (dt.data.length > 0) {
+      if (dt.length > 0) {
         this.allRecordsExist = true;
-        this.datasource = new MatTableDataSource<any>(dt.data);
+        this.datasource = new MatTableDataSource<any>(dt);
       } else {
         this.allRecordsExist = false;
       }
@@ -161,6 +159,16 @@ export class UserTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.data.unsubscribe();
+  }
+
+  viewRecord(data) {
+    const dialogRef = this.dialog.open(UserDetailsComponent, {
+      width: "800px",
+      data: {
+        data: data,
+        action: "Delete",
+      },
+    });
   }
 
 }

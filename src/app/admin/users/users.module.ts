@@ -30,6 +30,7 @@ import { AddUserComponent } from './pages/users/add-user/add-user.component';
 import { MatStepperModule } from "@angular/material/stepper";
 import { AddUserFormComponent } from './pages/users/add-user-form/add-user-form.component';
 import { UserBulkUploadComponent } from './pages/users/user-bulk-upload/user-bulk-upload.component';
+import { UserDetailsComponent } from './dialogs/user-details/user-details.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { UserBulkUploadComponent } from './pages/users/user-bulk-upload/user-bul
     UserTableComponent,
     AddUserComponent,
     AddUserFormComponent,
-    UserBulkUploadComponent
+    UserBulkUploadComponent,
+    UserDetailsComponent
   ],
   imports: [
     CommonModule,

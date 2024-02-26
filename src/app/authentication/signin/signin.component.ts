@@ -65,17 +65,7 @@ export class SigninComponent
               setTimeout(() => {
                 const role = res.roles;
                 console.log("Role ", role)
-                if (role[0].name === "All" || role[0].name === "Admin") {
-                  console.log("My Role ", role[0].name)
-                  this.router.navigate(["/admin/dashboard/main"]);
-                } else if (role[0].name === "Employee") {
-                  this.router.navigate(["/employee/dashboard"]);
-                } else if (role[0].name === "Client") {
-                  this.router.navigate(["/client/dashboard"]);
-                } else {
-                  console.log("My Role 22", role[0].name)
-                  this.router.navigate(["/authentication/signin"]);
-                }
+                this.router.navigate(["/admin/user-accounts/all"]);
                 this.loading = false;
               }, 1000);
             } else {

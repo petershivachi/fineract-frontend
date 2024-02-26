@@ -92,26 +92,26 @@
                       <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-25">
                         {{ row.name }}</mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="postedBy">
+                    <ng-container matColumnDef="disabled">
                       <mat-header-cell *matHeaderCellDef mat-sort-header
                         class="column-nowrap psl-3 tbl-col-width-per-25">Status</mat-header-cell>
                       <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-25">
-                        <div *ngIf="row.status == 1">
+                        <div *ngIf="row.disabled == false">
                           <span class="badge badge-pill badge-primary col-green">
-                            {{"Active"}}</span>
+                            {{"True"}}</span>
                         </div>
-                        <div *ngIf="row.status == 0">
+                        <div *ngIf="row.disabled == true">
                           <span class="badge badge-pill badge-primary col-red">
                             {{"Inactive"}}</span>
                         </div>
                       </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="postedTime">
+                    <ng-container matColumnDef="description">
                       <mat-header-cell *matHeaderCellDef mat-sort-header
-                        class="column-nowrap psl-3 tbl-col-width-per-20">Createed date</mat-header-cell>
+                        class="column-nowrap psl-3 tbl-col-width-per-20">Desscription</mat-header-cell>
                       <mat-cell *matCellDef="let row" class="column-nowrap psl-3 tbl-col-width-per-20">
-                        {{ row.creationDate | date: 'short' }}
+                        {{ row.description }}
                       </mat-cell>
                     </ng-container>
 

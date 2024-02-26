@@ -1,14 +1,23 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { BehaviorSubject } from 'rxjs';
-import { UserTableComponent } from './user-table/user-table.component';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { MatTabChangeEvent } from "@angular/material/tabs";
+import { BehaviorSubject, takeUntil } from "rxjs";
+import { UserTableComponent } from "./user-table/user-table.component";
+import { HttpParams } from "@angular/common/http";
+import { UserService } from "src/app/data/services/user.service";
+import { BaseComponent } from "src/app/shared/components/base/base.component";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.sass']
+  selector: "app-users",
+  templateUrl: "./users.component.html",
+  styleUrls: ["./users.component.sass"],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent extends BaseComponent implements OnInit {
   loading: boolean;
   tab1DisplayedColumns: string[] = [];
   reconDate: string;
@@ -36,12 +45,18 @@ export class UsersComponent implements OnInit {
   @Output("search")
   private searchEmitter: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private userService: UserService) {
+    super();
   }
 
-  
+  ngOnInit(): void {
+    this.load();
+  }
+
+  load(): void {
+    this.getAllAirtimeReconcilliationRecords();
+  }
+
   onTabChange(event: MatTabChangeEvent): void {
     const selectedIndex = event.index;
     console.log();
@@ -54,12 +69,12 @@ export class UsersComponent implements OnInit {
         this.tableDescription.next("Personal Accounts");
         this.tab1DisplayedColumns = [
           "username",
-      "officeId",
-      "firstname",
-      "lastname",
-      "email",
-      // "roles",
-      "view",
+          "officeId",
+          "firstname",
+          "lastname",
+          "email",
+          // "roles",
+          "view",
         ];
         break;
       case 1:
@@ -69,12 +84,12 @@ export class UsersComponent implements OnInit {
         this.tableDescription.next("Joint Accounts");
         this.tab1DisplayedColumns = [
           "username",
-      "officeId",
-      "firstname",
-      "lastname",
-      "email",
-      // "roles",
-      "view",
+          "officeId",
+          "firstname",
+          "lastname",
+          "email",
+          // "roles",
+          "view",
         ];
         break;
       case 2:
@@ -112,4 +127,18 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  getAllAirtimeReconcilliationRecords() {
+    this.userService
+      .fetchAllUserAccounts()
+      .pipe(takeUntil(this.subject))
+      .subscribe(
+        (res) => {
+          console.log("ALL AIRTIME RECORDS ", res);
+          this.allPaybillRecords.next(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
 }
